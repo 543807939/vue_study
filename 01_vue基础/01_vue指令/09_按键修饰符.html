@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../../vue.js"></script>
+</head>
+
+<body>
+    <div id="app" v-on:submit.prevent>
+        <input type="text" v-on:keyup.enter="handlerEnter">
+        <input type="text" v-on:keyup.delete="handlerDelete">
+        <form>
+            <input type="text" @keyup.enter="submitForm" v-model="account">
+            <!-- <input type="password" @keyup.enter="" v-model="password"> -->
+            <button v-text="msg" @click.left="submitForm"></button>
+        </form>
+    </div>
+</body>
+<script>
+    const vm = new Vue({
+        el: '#app',
+        data: {
+            msg: '提交',  // 这是现实的数据
+            account: '',
+            password: '',
+        },
+        methods: {
+            handlerEnter: function () {
+                console.log('提交');
+            },
+            handlerDelete: function () {
+                console.log('不要再删除了啦');
+            },
+            submitForm: function () {
+                console.log(`帐号: ${this.account} \n密码:${this.password}`);
+            }
+        }
+    })
+</script>
+
+</html>

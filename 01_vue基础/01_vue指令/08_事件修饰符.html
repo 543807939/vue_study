@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../../vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <div @click="handlerFather">
+            <!-- stop可以停止事件冒泡 -->
+            <button v-text="btn" v-on:click.stop="handlerFirst"></button>
+            <!-- prevent 可以阻止事件的默认行为 -->
+            <p><a @click.prevent.stop="see" href="https://cn.vuejs.org/index.html">来看啊</a></p>
+        </div>
+    </div>
+</body>
+<script>
+    const vm = new Vue({
+        el: '#app',
+        data: {
+            btn: '第一个按钮',
+
+        },
+        methods:{
+            handlerFather:function(){
+                console.log(`儿子,儿子,我是你爸爸 `);
+            },
+            handlerFirst:function(event){
+                console.dir(event.target.innerText);
+            },
+            see:function(){
+                console.log('我看到了');
+            }
+        }
+    })
+</script>
+
+</html>
