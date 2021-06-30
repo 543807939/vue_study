@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../../vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <button @click='num--'>-</button>
+        <button v-on:click='num--'>-</button>
+        <span v-text="num"></span>
+        <button @mouseover='num++'>+</button>
+        <button v-on:mouseover='num++'>+</button>
+        <button @click='handler'>点击变大</button>
+        <button @click='handler()'>我也是点击变大</button>
+    </div>
+</body>
+<script>
+    const vm = new Vue({
+        el: '#app',
+        data: {
+            num: 0
+        },
+        methods: {
+            handler: function () {
+                // 这个this指向的是vue对象实例
+                console.log(this === vm);
+                this.num++
+            }
+        }
+    })
+</script>
+
+</html>

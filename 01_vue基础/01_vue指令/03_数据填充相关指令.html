@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../../vue.js"></script>
+</head>
+<script>
+    /**
+     *  1. v-text 填充纯文本
+     *     没有闪动问题,比插值表达式更简洁
+     *  2. v-html 填充html片段
+     *     存在安全问题
+     *     本网站内部数据可以使用,来自第三方的数据不可以用
+     *  3. v-pre  填充原始信息
+     *     显示原始信息,跳过编译过程
+    */
+</script>
+
+<body>
+    <div id="app">
+        <span v-text="msg"></span>
+        <div v-html="msg1"></div>
+        <span v-pre>{{msg}}</span>
+    </div>
+</body>
+<script>
+    const vue = new Vue({
+        el: '#app',
+        data: {
+            msg: 'hello Vue',
+            msg1: `<h2>hello world</h2>`
+        }
+    })
+</script>
+
+</html>

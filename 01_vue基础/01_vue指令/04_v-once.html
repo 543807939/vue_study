@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../../vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <span v-text="msg"></span>
+        <p v-once>{{info}}</p>
+    </div>
+</body>
+<script>
+    // v-once 使用场景: 如果显示的信息后续不需要修改,那么可以使用v-once,可以提高性能
+    const vm = new Vue({
+        el: '#app',
+        data: {
+            msg: 'hello world',
+            info: '嘿嘿嘿'
+        }
+    })
+</script>
+
+</html>

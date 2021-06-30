@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../../vue.js"></script>
+</head>
+<style>
+    [v-clock] {
+        display: none;
+    }
+</style>
+
+<body>
+    <div id="app">
+        <div v-clock>{{msg}}</div>
+    </div>
+    <script>
+        /**
+         *  插值表达式存在闪动的问题 (刷新得时候可能会显示插值表达式 在卡的时候比较常见)
+         *  可以通过v-clock来解决闪动问题
+         *  v-clock 用法
+         *  1. 提供样式
+         *      [v-clock] {
+         *          display:none;
+         *      }
+         *  2. 在插值表达式所在标签中添加v-clock指令
+         * 
+         *  原理: 先通过样式隐藏内容,然后在内存中进行值的替换,替换好之后显示最终的结果
+        */
+        const vue = new Vue({
+            el: '#app',
+            data: {
+                msg: 'hello world'
+            }
+        })
+    </script>
+</body>
+
+</html>
