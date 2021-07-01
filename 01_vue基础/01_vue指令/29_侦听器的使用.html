@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../../vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        名: <input type="text" autocomplete="false" v-model.lazy="firstName"><br>
+        姓: <input type="text" autocomplete="false" v-model.lazy="lastName">
+        <p>{{fullName}}</p>
+    </div>
+</body>
+<script>
+    const vm = new Vue({
+        el: '#app',
+        data: {
+            firstName: '',
+            lastName: '',
+            fullName:''
+        },
+        methods: {
+
+        },
+        watch: {
+            firstName:function(val){
+                this.fullName = val + ' ' +this.lastName
+            },
+            lastName:function(val){
+                this.fullName = this.firstName + ' ' +val
+            }
+        },
+        computed: {
+            // fullName:function(){
+            //     return this.firstName + this.lastName
+            // }
+        }
+    })
+</script>
+
+</html>

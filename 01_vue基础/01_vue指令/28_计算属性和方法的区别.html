@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../../vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <input type="text" v-model="msg">
+        <p>{{reverseMsg}}</p>
+        <p>{{reverseMsg}}</p>
+        <p>{{fnMsgReserve()}}</p>
+        <p>{{fnMsgReserve()}}</p>
+        <p>{{total}}</p>
+        <p>{{total}}</p>
+    </div>
+</body>
+<script>
+    /* 
+        计算属性和方法区别在于 计算属性有缓存 如果数据不改变 调用两次计算属性的结果,只会执行一次计算属性的函数
+    */
+    const vm = new Vue({
+        el: '#app',
+        data: {
+            msg: 'hello',
+            num: 100
+        },
+        methods: {
+            fnMsgReserve: function () {
+                console.log('方法执行');
+                return this.msg.split('').reverse().join('')
+            }
+        },
+        computed: {
+            reverseMsg: function () {
+                console.log('计算属性执行');
+                return this.msg.split('').reverse().join('')
+            },
+            total: function () {
+                console.log('计算和');
+                let sum = 0
+                for (let i = 0; i <= this.num; i++) {
+                    sum += i
+                }
+                return sum
+            }
+        }
+    })
+</script>
+
+</html>
