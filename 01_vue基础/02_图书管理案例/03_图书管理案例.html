@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../../vue.js"></script>
+</head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        outline: none;
+    }
+
+    section {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    form {
+        padding: 12px 12px;
+        background: #7ed6df;
+    }
+
+    form input {
+        width: 140px;
+        vertical-align: middle;
+    }
+
+    button {
+        vertical-align: middle;
+    }
+
+    table {
+        border-collapse: collapse;
+    }
+
+    th,
+    td {
+        padding: 6px 13px;
+        border: 1px solid #333;
+        text-align: center;
+    }
+
+    .total {
+        height: 30px;
+        line-height: 30px;
+        background: #7ed6df;
+    }
+</style>
+
+<body>
+    <div id="app">
+        <section>
+            <form v-on:submit.prevent>
+                <label for="bookID">图书编号</label><input type="text" v-focus v-bind:disabled="flag" id="bookID"
+                    v-model.lazy="newBook.id">
+                <label for="bookname">图书名称</label><input type="text" id="bookname" v-model.lazy="newBook.name">
+                <button v-on:click="handle" :disabled='btnFlag'>提交</button>
+            </form>
+            <div class="total"><span>图书总数：</span><span>{{total}}</span></div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>编号</th>
+                        <th>名称</th>
+                        <th>时间</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr :key="item.id" v-for="item in bookList">
+                        <td>{{item.id}}</td>
+                        <td>{{item.name}}</td>
+                        <td>{{item.time | formatTime}}</td>
+                        <td><a href="javascript:;" v-on:click.prevent="modifyBook(item.id)">修改</a> | <a
+                                href="javascript:;" v-on:click.prevent="deleteBook(item.id)">删除</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+</body>
+<script>
+    const vm = new Vue({
+        el: '#app',
+        data: {
+            flag: false,
+            btnFlag: false,
+            newBook: {
+                name: '',
+                id: '',
+                time: ''
+            },
+            bookList: []
+        },
+        methods: {
+            deleteBook: function (bookID) {
+                // this.bookList = this.bookList.filter(item => item.id !== bookID)
+                // console.log(this.bookList);
+                let index = this.bookList.findIndex(item => {
+                    return item.id == bookID
+                })
+                this.bookList.splice(index, 1)
+            },
+            modifyBook: function (bookID) {
+                this.flag = true
+                this.newBook.name = this.bookList.filter(item => item.id == bookID)[0].name
+                this.newBook.id = this.bookList.filter(item => item.id == bookID)[0].id
+                // console.log(this.bookList.filter(item => item.id == bookID));
+            },
+            handle: function () {
+                // 如果被禁用 则表示是修改操作
+                if (this.flag) {
+                    this.bookList.some((item) => {
+                        if (item.id == this.newBook.id) {
+                            item.name = this.newBook.name
+                            this.flag = false
+                            return true
+                        }
+                    })
+                } else {
+                    if (!this.newBook.id || !this.newBook.name) {
+                        return console.log('请输入合适的数据');
+                    }
+                    this.bookList.push(this.newBook)
+                }
+            },
+
+        },
+        filters: {
+            formatTime: function (time) {
+                function addZero(num) {
+                    return num > 9 ? num : '0' + num
+                }
+                let val = new Date(Number(time))
+                return `${val.getFullYear()}-${addZero(val.getMonth() + 1)}-${addZero(val.getDate())} ${addZero(val.getHours())}:${addZero(val.getMinutes())}:${addZero(val.getSeconds())}`
+            }
+        },
+        directives: {
+            focus: {
+                inserted: function (el) {
+                    el.focus()
+                }
+            }
+        },
+        computed: {
+            total: function () {
+                return this.bookList.length
+            },
+            bookName: function () {
+                return this.newBook.name
+            },
+            bookId: function () {
+                return this.newBook.id
+            }
+        },
+        watch: {
+            bookName: function (val) {
+                let newFlag = this.bookList.some(item => {
+                    if (item.name == val) {
+                        // 说明存在相同数据
+                        return true
+                    }
+                })
+                this.btnFlag = newFlag
+            },
+            bookId: function (val) {
+                console.log(val);
+                let newFlag = this.bookList.some(item => {
+                    if (item.id == val) {
+                        // 说明存在相同数据
+                        return true
+                    }
+                })
+                this.btnFlag = newFlag
+            }
+        },
+        mounted: function () {
+            let data = [
+                {
+                    id: 1,
+                    name: '三国演义',
+                    time: '1625200299047'
+                },
+                {
+                    id: 2,
+                    name: '红楼梦',
+                    time: '1625211229047'
+                },
+                {
+                    id: 3,
+                    name: 'JavaScript从入门到入土',
+                    time: '1625112239047'
+                },
+                {
+                    id: 4,
+                    name: '西游记',
+                    time: '1624212249047'
+                },
+            ]
+            this.bookList = data
+        }
+    })
+</script>
+
+</html>

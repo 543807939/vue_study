@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../../vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <ul>
+            <li v-for="item in list">{{item}}</li>
+        </ul>
+        <p v-for="(key,value,index) in info">{{index+1}} --- {{key}} --- {{value}}</p>
+    </div>
+</body>
+<script>
+    /* 
+        Vue.set(vm.items,indexOfItem,newValue)
+        vm.$set(vm.items,indexOfItem,newValue)
+        第一个参数为 要处理的数组名称   (要处理的对象)
+        第二个参数为 要处理的数组索引   (要处理对象的属性名)
+        第三个参数为 要处理的数组的值   (处理之后的属性值)
+    */
+    const vm = new Vue({
+        el: '#app',
+        data: {
+            list: ['apple', 'banana', 'orange'],
+            info: {
+                name: '张三',
+                age: 14,
+                gender: '男'
+            }
+        },
+    })
+    Vue.set(vm.list, 1, 'lemon')
+    vm.$set(vm.list, 3, 'watermelon')
+
+    vm.$set(vm.info, 'nickname', '法外狂徒')
+</script>
+
+</html>

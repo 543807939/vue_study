@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../../vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <label for="name">水果名称 : </label><input v-focus type="text" id="name" v-model.lazy="newFruit.name"><br>
+        <label for="price">水果价钱 : </label><input type="text" id="price" v-model.lazy="newFruit.price"><br>
+        <button v-on:click="addFruit">添加水果</button>
+        <button v-on:click="deleteLastFruit">删除最后一个水果</button>
+        <ul>
+            <li :key="index" v-for="(item,index) in fruits">{{item.name}} --- {{item.price}}</li>
+        </ul>
+    </div>
+</body>
+<script>
+    const vm = new Vue({
+        el: '#app',
+        data: {
+            newFruit: {
+                name: '',
+                price: ''
+            },
+            fruits: [
+                {
+                    name: 'apple',
+                    price: 10
+                },
+                {
+                    name: 'orange',
+                    price: 20
+                },
+                {
+                    name: 'banana',
+                    price: 30
+                },
+                {
+                    name: 'watermelon',
+                    price: 12
+                },
+            ]
+        },
+        methods: {
+            addFruit: function () {
+                if (!this.newFruit.name || !this.newFruit.price) {
+                    return console.log('请输入正确的值');
+                }
+                this.fruits.push(this.newFruit)
+            },
+            deleteLastFruit: function () {
+                if (this.fruits.length > 0) {
+                    return this.fruits.pop()
+                }
+                console.log('真的没有了啦');
+            }
+        },
+        directives: {
+            focus: {
+                inserted: function (el) {
+                    el.focus()
+                }
+            }
+        }
+    })
+</script>
+
+</html>

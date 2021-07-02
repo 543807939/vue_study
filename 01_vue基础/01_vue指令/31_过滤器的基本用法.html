@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../../vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <input type="text" v-focus v-model.lazy="account">
+        <p>{{account}}</p>
+        <p>{{account | upper}}</p>
+        <!-- <p>{{`过滤之后:${account|upper}`}}</p> -->
+        <!-- 这个不对 因为${accout|upper}被一起解析了 upper被认为是一个变量 -->
+        <p>过滤之后: {{account|upper}}</p>
+        <p>过滤之后: {{account|lower}}</p>
+    </div>
+</body>
+<script>
+    // 自定义指令
+    // Vue.directive('focus', {
+    //     inserted: function (el) {
+    //         el.focus()
+    //     }
+    // })
+
+    // 自定义过滤器
+    /* 
+        Vue.filter('过滤器名称',function(value){
+            // 过滤器业务逻辑
+        })
+    */
+    Vue.filter('upper', function (val) {
+        return val.toUpperCase()
+    })
+    const vm = new Vue({
+        el: '#app',
+        data: {
+            account: ''
+        },
+        methods: {
+
+        },
+        watch: {
+
+        },
+        computed: {
+
+        },
+        filters: {
+            lower: function (val) {
+                return val.toLowerCase()
+            }
+        },
+        // 自定义局部指令
+        directives: {
+            focus: {
+                inserted: function (el) {
+                    el.focus()
+                }
+            }
+        }
+    })
+</script>
+
+</html>
