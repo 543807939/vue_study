@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../../vue.js"></script>
+</head>
+<style>
+    table {
+        border-collapse: collapse;
+    }
+
+    th,
+    td {
+        text-align: center;
+        border: 1px solid #000;
+        padding: 8px 12px;
+    }
+</style>
+
+<body>
+    <div id="app">
+        <table>
+            <tr>
+                <th>编号</th>
+                <th>名称</th>
+                <th>价格</th>
+                <th>剩余数量</th>
+            </tr>
+            <tr v-for="(item,index) in fruits">
+                <td>{{index+1}}</td>
+                <td>{{item.name}}</td>
+                <td>{{item.price}}</td>
+                <td>{{item.num}}</td>
+            </tr>
+        </table>
+        <ul>
+            <li v-for="item in fruits">{{`${item.name} --- ${item.price} --- ${item.num}`}} </li>
+        </ul>
+        <hr>
+        <ul>
+            <li v-for="(item,index) in fruits">{{`${index}---${item.name} --- ${item.price} --- ${item.num}`}}</li>
+        </ul>
+        <ul>
+            <li :key="index" v-for="(item,index) in fruits" v-on:click="handle(item)">{{`${index}---${item.name} ---
+                ${item.price}
+                ---${item.num}`}}</li>
+        </ul>
+    </div>
+
+</body>
+<script>
+    /* 
+        v-for 遍历数组
+        <li v-for="item in fruits">{{`item.name --- item.price --- item.num`}}<li>
+
+        index 为数组的索引
+        <li v-for="(item,index) in fruits">{{`${index+1}---${item.name} --- ${item.price} --- ${item.num}`}}</li>
+
+        加上key 可以帮助vue区分不同的元素,从而提高性能
+        <li :key="index" v-for="(item,index) in fruits">{{`${index+1}---${item.name} --- ${item.price} ---
+            ${item.num}`}}</li>
+    */
+    const vm = new Vue({
+        el: '#app',
+        data: {
+            fruits: [
+                {
+                    name: 'apple',
+                    price: 20,
+                    num: 10
+                },
+                {
+                    name: 'orange',
+                    price: 15,
+                    num: 30
+                },
+                {
+                    name: 'watermelon',
+                    price: 10,
+                    num: 100
+                },
+                {
+                    name: 'pear',
+                    price: 20,
+                    num: 49
+                },
+            ]
+        },
+        methods: {
+            handle: function (item) {
+                console.log(item);
+            }
+        }
+    })
+</script>
+
+</html>

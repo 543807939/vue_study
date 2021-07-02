@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../../vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <a v-bind:href="src">来点一下吧</a>
+        <button v-on:click.right="handle">我要看b站</button>
+    </div>
+</body>
+<script>
+    const vm = new Vue({
+        el: '#app',
+        data: {
+            src: 'http://www.baidu.com'
+        },
+        methods: {
+            handle: function () {
+                this.src = 'http://www.bilibili.com'
+            }
+        }
+    })
+</script>
+
+</html>

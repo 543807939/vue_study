@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../../vue.js"></script>
+</head>
+<style>
+    .active {
+        width: 400px;
+        height: 400px;
+        background: linear-gradient(to right bottom, #f08, #8f0);
+    }
+
+    .no-active {
+        width: 400px;
+        height: 400px;
+        background: linear-gradient(to left top, #f08, #8f0);
+    }
+
+    .err {
+        box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+    }
+</style>
+
+<body>
+    <div id="app">
+        <div v-bind:class={active:isActive,err:isError}>div内容</div>
+        <button v-on:click="handle">变变变</button>
+    </div>
+</body>
+<script>
+    const vm = new Vue({
+        el: '#app',
+        data: {
+            isActive: true,
+            isError: false
+        },
+        methods: {
+            handle: function () {
+                this.isActive = !this.isActive
+                this.isError = !this.isError
+            }
+        }
+    })
+</script>
+
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../../vue.js"></script>
+</head>
+<style>
+    .active {
+        width: 200px;
+        height: 200px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, .4);
+    }
+
+    .err {
+        background: linear-gradient(45deg, #f08, #80f);
+    }
+</style>
+
+<body>
+    <div id="app">
+        <section v-bind:class='[isActive,isError]'></section>
+        <button v-on:click="handle">切换</button>
+    </div>
+</body>
+<script>
+    const vm = new Vue({
+        el: '#app',
+        data: {
+            isActive: 'active',
+            isError: 'err'
+        },
+        methods: {
+            handle: function () {
+                this.isActive = ''
+                this.isError = ''
+            }
+        }
+    })
+</script>
+
+</html>

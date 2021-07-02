@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../../vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <input type="text" v-on:keyup="handler">
+        <input type="text" v-on:keyup.aaa="handler">
+    </div>
+</body>
+<script>
+    // 自定义按键修饰符
+    // 规则: 名字是自定义的,对应的值是案件对应的event.keyCode值
+    Vue.config.keyCodes.aaa = 65
+    const vm = new Vue({
+        el: '#app',
+        data: {
+
+        },
+        methods: {
+            handler: function (event) {
+                console.dir(event.keyCode);
+            }
+        }
+    })
+</script>
+
+</html>

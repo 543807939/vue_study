@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../../vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <input type="text" v-model.number="age">
+        <input type="text" v-model.trim="info">
+        <input type="text" v-model="msg">
+        <p>{{msg}}</p>
+        <input type="text" v-model.lazy="newMsg">
+        <p>{{newMsg}}</p>
+        <button v-on:click="handle">按钮</button>
+    </div>
+</body>
+<script>
+    /* 
+        表单作用域修饰符的用法:
+        number:将表单数据转换成数值
+        trim:去掉表单数据的开始结尾空格
+        lazy:将input事件切换为change事件 (v-model就是input事件)
+    */
+    const vm = new Vue({
+        el: '#app',
+        data: {
+            age: '',
+            info: '',
+            msg: '',
+            newMsg: ''
+        },
+        methods: {
+            handle: function () {
+                console.log(this.age + 10);
+                console.log(this.info.length);
+            }
+        }
+    })
+</script>
+
+</html>

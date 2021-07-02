@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../../vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <!-- 对象绑定方式 -->
+        <section v-bind:style='{width:boxWidth,height:boxHeight,border:boxBorder,background:boxBGC}'></section>
+        <section v-bind:style='boxStyle'></section>
+        <button v-on:click="handle">变大</button>
+        <!-- 数组绑定方式 -->
+        <!-- 数组中放多个样式对象 -->
+        <section v-bind:style=[boxStyle,overStyle]>111</section>
+    </div>
+</body>
+<script>
+    const vm = new Vue({
+        el: '#app',
+        data: {
+            boxWidth: '300px',
+            boxHeight: '300px',
+            boxBorder: '1px solid #f08',
+            boxBGC: '#f08',
+            boxStyle: {
+                border: '1px solid #f08',
+                width: '50px',
+                height: '50px',
+                background: '#f80'
+            },
+            overStyle: {
+                color: '#fff'
+            }
+        },
+        methods: {
+            handle: function () {
+                this.boxWidth = '400px'
+                this.boxStyle.width = '100px'
+            }
+        }
+    })
+</script>
+
+</html>

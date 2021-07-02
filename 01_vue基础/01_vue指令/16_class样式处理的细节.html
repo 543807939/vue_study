@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../../vue.js"></script>
+</head>
+<style>
+    .base {
+        width: 200px;
+        height: 200px;
+    }
+
+    .colorful {
+        background: linear-gradient(45deg, #08f, #0f8);
+    }
+
+    .shadow {
+        box-shadow: 0 0 3px rgba(0, 0, 0, .3);
+    }
+</style>
+
+<body>
+    <div id="app">
+        <section class="base" v-bind:class="[colorMore,{shadow:isShadow}]"></section>
+        <section class="base" v-bind:class="classObj"></section>
+    </div>
+</body>
+<script>
+    /* 
+        样式绑定的相关细节:
+            1. 对象绑定和数值绑定可以结合使用
+            2. class绑定的值可以简化操作
+            3. 默认的class会保留,不会被覆盖
+    */
+    const vm = new Vue({
+        el: '#app',
+        data: {
+            colorMore: 'colorful',
+            isShadow: true,
+            classObj: {
+                colorful: true,
+                isShadow: true,
+            }
+        },
+        methods: {
+
+        }
+    })
+</script>
+
+</html>
