@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../../vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <template-tom></template-tom>
+        <template-jerry></template-jerry>
+    </div>
+</body>
+<script>
+    // 创建事件中心
+    const eventHub = new Vue()
+    // 创建全局组件
+    Vue.component('TemplateTom', {
+        data: function () {
+            return {
+                num: '',
+                account: 0
+            }
+        },
+        template: `
+            <div>
+                <input type="text" v-model.number="num"><button @click="handle">给jerry加满</button>
+                <p>{{account}}</p>
+            </div>
+        `,
+        methods: {
+            handle: function () {
+                eventHub.$emit("add-jerry",this.num)
+            }
+        },
+        mounted: function () {
+            eventHub.$on('add-tom', val => {
+                console.log(val);
+                console.log(typeof val);
+                this.account += val
+            })
+        }
+    })
+    Vue.component('TemplateJerry', {
+        data: function () {
+            return {
+                num: '',
+                account: 0
+            }
+        },
+        template: `
+            <div>
+                <input type="text" v-model.number="num"><button @click="handle">给tom加满</button>
+                <p>{{account}}</p>
+            </div>
+        `,methods:{
+            handle:function(){
+                eventHub.$emit('add-tom',this.num)
+            }
+        },
+        mounted: function () {
+            eventHub.$on('add-jerry', val => {
+                console.log(val);
+                console.log(typeof val);
+                this.account += val
+            })
+        }
+    })
+    const vm = new Vue({
+        el: '#app',
+        data: {
+
+        }
+    })
+</script>
+
+</html>

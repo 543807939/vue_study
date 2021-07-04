@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../../vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <aler-error-box>{{msg}}</aler-error-box>
+        <aler-error-box>发生错误</aler-error-box>
+        <aler-error-box></aler-error-box>
+    </div>
+</body>
+<script>
+    Vue.component('aler-error-box',{
+        props:[],
+        template:`
+            <div>
+                <p>error!</p>    
+                <slot>默认内容</slot>
+            </div>
+        `
+    })
+    const vm = new Vue({
+        el:'#app',
+        data:{
+            msg:'404'
+        }
+    })
+</script>
+</html>

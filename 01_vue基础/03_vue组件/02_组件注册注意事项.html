@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../../vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <handle-click></handle-click>
+        <!-- <MyTemplate></MyTemplate> -->
+        <my-template></my-template>
+    </div>
+</body>
+<script>
+    /* 
+        1. data 必须是一个函数(为了产生闭包 使多个组件使用不同的数据)
+        2. 组件的模板内容必须是单个元素
+        3. 组件模板的内容可以是模板字符串
+        4. 组件的命名方式有 短横线式('handle-click')和驼峰式('HandleClick')
+        5. 如果使用驼峰式命名组件,使用组件的时候只能在字符串模板中使用驼峰的方式,在普通的模板中要换成短横线的方式(首字母小写,在单词之间使用短横线)
+    */
+    Vue.component('MyTemplate', {
+        data: function () {
+            return {
+                msg:'被嫌弃的松子的一生'
+            }
+        },
+        template:`<h3>{{msg}}</h3>`
+    })
+    Vue.component('handle-click', {
+        data: function () {
+            return {
+                account: 0
+            }
+        },
+        template: `
+                <div>
+                    <button v-on:click="handle">点击了{{account}}次</button>
+                    <MyTemplate></MyTemplate>
+                </div>
+                `,
+        methods: {
+            handle: function () {
+                this.account += 2
+            }
+        }
+    })
+    const vm = new Vue({
+        el: '#app',
+        data: {
+
+        }
+    })
+</script>
+
+</html>

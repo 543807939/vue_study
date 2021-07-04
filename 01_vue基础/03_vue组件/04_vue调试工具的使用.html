@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../../vue.js"></script>
+</head>
+<style>
+    .root {
+        background: #f08;
+    }
+
+    .second {
+        background: linear-gradient(to left, #f08, #f80);
+    }
+
+    .third {
+        background: linear-gradient(to left, #8f0, #80f);
+    }
+</style>
+
+<body>
+    <div id="app">
+        <div class="root">{{root}}</div>
+        <second-com></second-com>
+        <second-com></second-com>
+    </div>
+</body>
+<script>
+    // 二级组件
+    Vue.component('second-com', {
+        data: function () {
+            return {
+                second: '二级组件'
+            }
+        },
+        template: `
+                <div class="second">
+                    <p>{{second}}</p>
+                    <third-com></third-com>
+                    <third-com></third-com>
+                    <third-com></third-com>
+                </div>
+        `
+    })
+    // 三级组件
+    Vue.component('third-com', {
+        data: function () {
+            return {
+                third: '三级组件'
+            }
+        },
+        template: `
+                <div class="third">
+                    <p>{{third}}</p>
+                </div>
+        `
+    })
+    const vm = new Vue({
+        el: '#app',
+        data: {
+            root: '顶层组件'
+        },
+        components: {
+
+        }
+    })
+</script>
+
+</html>

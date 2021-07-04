@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../../vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <div class="box" :style={color:color}>{{pmsg}}</div>
+        <my-template :f-color="color" @change-color="handleColor($event)"></my-template>
+    </div>
+</body>
+<script>
+    // 定义子组件
+    Vue.component('MyTemplate', {
+        props: ['fColor'],
+        data: function () {
+            return {
+                color: ''
+            }
+        },
+        template: `<input v-model="color" @change="$emit('change-color',color)" type="text">`,
+        mounted:function(){
+            this.color = this.fColor
+        }
+    })
+    const vm = new Vue({
+        el: '#app',
+        data: {
+            pmsg: '父组件的内容',
+            color: 'red'
+        },
+        methods: {
+            handleColor: function (val) {
+                console.log(val);
+                this.color = val
+            }
+        }
+    })
+</script>
+
+</html>

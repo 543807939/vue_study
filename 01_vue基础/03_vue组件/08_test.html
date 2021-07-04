@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../../vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <p>{{newHero}}</p>
+        <my-template :f-heros="heros" :f-total="total" :f-flag="flag" :new-hero="newHero" @add-hero="addHero($event)"></my-template>
+    </div>
+</body>
+<script>
+    Vue.component('MyTemplate', {
+        props: ['fHeros', 'fTotal', 'fFlag','newHero'],
+        data: function () {
+            return {
+    
+            }
+        },
+        template: `
+            <div>
+                <form @submit.prevent>
+                    <label for="name">名称：</label><input id="name" type="text" v-model="sNewHero.name"><br>
+                    <label for="gender">性别：</label><input id="gender" type="text" v-model="sNewHero.gender"><br>
+                    <label for="nickname">外号：</label><input id="nickname" type="text" v-model="sNewHero.nickname"><br>
+                    <button @click="$emit('add-hero',sNewHero)">点击增加</button>    
+                </form>
+                <p>{{fTotal}} --- {{typeof fTotal}}</p>
+                <p>{{fFlag}} --- {{typeof fFlag}}</p>
+                <ul>
+                    <li v-for="item in fHeros">
+                        <p v-for="(value,key,index) in item">{{key}}---{{value}}</p> 
+                    </li>
+                </ul>
+            </div>
+        `,
+        computed:{
+            sNewHero:function(){
+                return this.newHero
+            }
+        }
+    })
+    const vm = new Vue({
+        el: '#app',
+        data: {
+            newHero: {
+                    name: '',
+                    gender: '',
+                    nickname: ''
+                },
+            heros: [{
+                    name: '张三',
+                    gender: 'male',
+                    nickname: '法外狂徒'
+                },
+                {
+                    name: '易',
+                    gender: 'male',
+                    nickname: '无极剑圣'
+                },
+                {
+                    name: '劫',
+                    gender: 'male',
+                    nickname: '影流之主'
+                },
+                {
+                    name: '妮寇',
+                    gender: 'male',
+                    nickname: '万花通灵'
+                },
+            ],
+            total: 20,
+            flag: true
+        },
+        methods: {
+            addHero: function (newHero) {
+                for (const key in newHero) {
+                    if (!newHero[key]) {
+                        return console.log(`${key}不能为空`);
+                    }
+                }
+                this.heros.push(newHero)
+                this.newHero = {
+                    name:'',
+                    gender:'',
+                    nickname:''
+                }
+            }
+        }
+    })
+</script>
+
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../../vue.js"></script>
+</head>
+ 
+<body>
+    <div id="app">
+        <menu-item :title="pmsg"></menu-item>
+        <menu-item :title="pmsg" :nickname="name"></menu-item>
+    </div>
+</body>
+<script>
+    /* 
+        父组件通过属性传递的方式向子组件传值,子组件设置一个props属性来接收
+    */
+    Vue.component('menu-item', {
+        props: ['title','nickname'],
+        data: function () {
+            return {
+                msg: '我是子组件的数据'
+            }
+        },
+        template: `<div>{{msg +'---'+ title + '---' + nickname}}</div>`
+    })
+    const vm = new Vue({
+        el: '#app',
+        data: {
+            pmsg: '我是爸爸',
+            name: '法外狂徒'
+        }
+    })
+</script>
+
+</html>

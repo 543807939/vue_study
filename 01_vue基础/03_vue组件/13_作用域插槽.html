@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../../vue.js"></script>
+</head>
+<style>
+    .current{
+        color: #f08;
+    }
+</style>
+<body>
+    <div id="app">
+        <input type="text" v-model="current">
+        <furit-list :fruits="fruits">
+            <template slot-scope="slotProps">
+                <p :class="slotProps.info.id == current ? 'current':''">{{slotProps.info.id +'----'+slotProps.info.name}}</p>
+            </template>
+        </furit-list>
+    </div>
+</body>
+<script>
+    Vue.component('furit-list', {
+        props: ['fruits'],
+        template: `
+            <div>
+                <ul>
+                    <li :key="item.id" v-for="item in fruits">
+                        <slot :info="item">{{item.id}} --- {{item.name}}</slot>
+                    </li>
+                </ul>    
+            </div>
+        `
+    })
+    const vm = new Vue({
+        el: '#app',
+        data: {
+            current: 0,
+            fruits: [{
+                    id: 1,
+                    name: 'apple'
+                },
+                {
+                    id: 2,
+                    name: 'orange'
+                }, {
+                    id: 3,
+                    name: 'lemon'
+                }, {
+                    id: 4,
+                    name: 'watermelon'
+                },
+            ]
+        }
+    })
+</script>
+
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../../vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <button v-on:click="handle">别加了</button>
+        <test-tom></test-tom>
+        <test-jerry></test-jerry>
+    </div>
+</body>
+<script>
+    /* 
+        非父子组件交互需要
+        单独的事件中心来管理组件间的通信
+        const eventHub = new Vue()
+        监听事件和销毁事件
+        eventHub.$on('add-todo',addTodo)
+        eventHub.$off('add-todo')
+        触发事件
+        eventHub.$emit('add-todo',id)
+    */
+    const eventHub = new Vue()
+    Vue.component('TestTom', {
+        data: function () {
+            return {
+                num: 0
+            }
+        },
+        template: `<div>
+                <p>Tom: {{num}}</p>
+                <button @click="handle">控制杰瑞</button>
+            </div>`,
+        methods: {
+            handle: function () {
+                eventHub.$emit('add-jerry',3)
+            }
+        },
+        mounted: function () {
+            eventHub.$on('add-tom', val => {
+                this.num += val
+            })
+        }
+    })
+    Vue.component('TestJerry', {
+        data: function () {
+            return {
+                num: 0
+            }
+        },
+        template: `<div>
+                <p>Jerry: {{num}}</p>
+                <button @click="handle">控制汤姆</button>
+            </div>`,
+        methods: {
+            handle: function () {
+                eventHub.$emit('add-tom',2)
+            }
+        },
+        mounted: function () {
+            eventHub.$on('add-jerry', val => {
+                this.num += val
+            })
+        }
+    })
+
+
+    const vm = new Vue({
+        el: '#app',
+        data: {
+
+        },
+        methods:{
+            handle:function(){
+                eventHub.$off('add-tom')
+                eventHub.$off('add-jerry')
+            }
+        }
+    })
+</script>
+
+</html>

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../../vue.js"></script>
+</head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        user-select: none;
+    }
+
+    ul {
+        list-style: none;
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    .cart {
+        width: 600px;
+        margin: 100px auto;
+    }
+
+    .title {
+        text-align: center;
+        font-size: 20px;
+    }
+
+    .item {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+    }
+
+    .item img {
+        width: 60px;
+    }
+
+    .total {
+        text-align: center;
+    }
+</style>
+
+<body>
+    <div id="app">
+        <my-cart></my-cart>
+    </div>
+</body>
+<script>
+    const CartTitle = {
+        props: ['uname'],
+        template: `
+            <div class="title">{{uname}}的商品</div>
+        `
+    }
+    const CartList = {
+        props: ['goods'],
+        template: `
+        <div>
+            <ul>
+                <li :key="item.id" v-for="item in goods" class="item">
+                    <img :src="item.img">    
+                    <div class="name">{{item.name}}</div>
+                    <div class="change">
+                        <a href="javascript:;" @click="sub(item.id)">-</a>
+                        <input type="text" class="num" :value="item.num" @blur="changeNum(item.id,$event)">
+                        <a href="javascript:;" @click="add(item.id)">+</a>
+                    </div>
+                    <div class="del" @click="del(item.id)">x</div>
+                </li>
+            </ul>
+        </div>
+       `,
+        methods: {
+            del: function (id) {
+                this.$emit('cart-del', id)
+            },
+            changeNum: function (val, event) {
+                this.$emit('change-num', {
+                    id: val,
+                    type: 'change',
+                    num: event.target.value
+                })
+            },
+            sub: function (val) {
+                this.$emit('change-num', {
+                    id: val,
+                    type: 'sub',
+                })
+            },
+            add: function (val) {
+                this.$emit('change-num', {
+                    id: val,
+                    type: 'add',
+                })
+            }
+        }
+    }
+    const CartTotal = {
+        props: ['goods'],
+        template: `
+            <div class="total">总价:{{total}}</div>
+       `,
+        computed: {
+            total: function () {
+                let total = 0
+                this.goods.forEach(element => {
+                    total += element.price * element.num
+                });
+                return total
+            }
+        }
+    }
+    Vue.component('my-cart', {
+        data: function () {
+            return {
+                uname: '李四',
+                list: [{
+                    id: 1,
+                    name: 'TCL彩电',
+                    price: 1000,
+                    num: 1,
+                    img: 'img/a.jpg'
+                }, {
+                    id: 2,
+                    name: '机顶盒',
+                    price: 1000,
+                    num: 1,
+                    img: 'img/b.jpg'
+                }, {
+                    id: 3,
+                    name: '海尔冰箱',
+                    price: 1000,
+                    num: 1,
+                    img: 'img/c.jpg'
+                }, {
+                    id: 4,
+                    name: '小米手机',
+                    price: 1000,
+                    num: 1,
+                    img: 'img/d.jpg'
+                }, {
+                    id: 5,
+                    name: 'PPTV电视',
+                    price: 1000,
+                    num: 2,
+                    img: 'img/e.jpg'
+                }]
+
+            }
+        },
+        template: `
+            <div class="cart">
+                <cart-title :uname="uname"></cart-title>
+                <cart-list :goods="list" @cart-del="del($event)" @change-num="changeNum($event)"></cart-list>
+                <cart-total :goods="list"></cart-total>
+            </div>
+        `,
+        components: {
+            'cart-title': CartTitle,
+            'cart-list': CartList,
+            'cart-total': CartTotal,
+        },
+        methods: {
+            del: function (val) {
+                let index = this.list.findIndex(element => element.id == val)
+                this.list.splice(index, 1)
+            },
+            decrease: function (val) {
+
+            },
+            increase: function (val) {
+
+            },
+            changeNum: function (val) {
+                if (val.type == 'change') {
+                    this.list.some(element => {
+                        if (element.id == val.id) {
+                            element.num = val.num
+                            return true
+                        }
+                    })
+                } else if (val.type == 'sub') {
+                    let index = this.list.findIndex(element => element.id == val.id)
+                    this.list[index].num > 0 ? this.list[index].num-- : this.list[index].num
+                } else {
+                    let index = this.list.findIndex(element => element.id == val.id)
+                    this.list[index].num++
+                }
+
+            }
+        }
+    })
+    const vm = new Vue({
+        el: '#app',
+        data: {
+
+        }
+    })
+</script>
+
+</html>

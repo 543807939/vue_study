@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../../vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <p :style="{fontSize:fontSize +'px'}">{{pMsg}}</p>
+        <my-template :p-fruits="pFruits" @enlarge-text="bigger"></my-template>
+    </div>
+</body>
+<script>
+    /* 
+        子组件向父组件传递数据 - 基本用法:
+        props传递数据原则: 单向数据流 (子组件不可以直接操作父组件的数据)
+
+        子组件可以通过 $emit('函数名',参数) 的方式来调用 父组件传递的 @函数名="处理函数($event)"
+    */
+    Vue.component('MyTemplate', {
+        props: ['pFruits'],
+        data: function () {
+            return {
+
+            }
+        },
+        template: ` <div>
+                    <ul>
+                        <li v-for="item in pFruits">{{item}}</li>
+                    </ul>
+                    <button @click="pFruits.push('lemon')">点击有好事</button>
+                    <button @click="$emit('enlarge-text')">点击变大</button>
+                    </div>
+                    `
+    })
+    const vm = new Vue({
+        el: '#app',
+        data: {
+            pMsg: '父组件的介绍',
+            pFruits: ['apple', 'orange', 'banana'],
+            fontSize: 12
+        },
+        methods: {
+            bigger: function () {
+                this.fontSize += 2
+            }
+        }
+    })
+</script>
+
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../../vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <base-layout>
+            <p>错误未知</p>
+            <p slot="header">我是头部内容</p>
+            <p slot="header">我是头部内容1</p>
+            <p slot="footer">我是足部内容</p>
+            <p slot="contain">我是真正的内容</p>
+            <p>它发生了</p>
+        </base-layout>
+        <hr>
+        <base-layout>
+            <p>错误未知</p>
+            <template slot="header">
+                <p>我是头部内容</p>
+                <p>我是头部内容1</p>
+            </template>
+            <p slot="footer">我是足部内容</p>
+            <p slot="contain">我是真正的内容</p>
+            <p>它发生了</p>
+        </base-layout>
+    </div>
+</body>
+<script>
+    Vue.component('base-layout', {
+        template: `
+            <div>
+                <p>发生错误</P>
+                <slot></slot>    
+                <p>我来组成头部</p>
+                <slot name="header"></slot>
+                <p>我是内容</p>
+                <slot name="contain"></slot>
+                <p>我来组成脚</p>
+                <slot name="footer"></slot>
+            </div>
+        `
+    })
+    const vm = new Vue({
+        el: '#app',
+        data: {
+
+        }
+    })
+</script>
+
+</html>

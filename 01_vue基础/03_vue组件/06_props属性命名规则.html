@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../../vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <input type="text" v-focus v-model="msg">
+        <my-template :nickname="msgStr" :user-height="height"></my-template>
+    </div>
+</body>
+<script>
+    // 自定义指令
+    Vue.directive('focus', {
+        inserted: function (el) {
+            el.focus()
+        }
+    })
+    // 定义全局组件
+    /* 
+        props属性名命名规则
+        1. 在props中使用驼峰形式,在模板中使用短横线形式
+        2. 字符串形式的模板没有这个限制
+     */
+    Vue.component('MyTemplate', {
+        props:['nickname','userHeight'],
+        data: function () {
+            return {
+                name: '张三'
+            }
+        },
+        template: `<p>{{name}} --- {{nickname}} -- {{userHeight}}</p>`
+    })
+    const vm = new Vue({
+        el: '#app',
+        data: {
+            msg: '',
+            height:'170'
+        },
+        computed: {
+            msgStr: function () {
+                return '称号:' + this.msg
+            }
+        }
+    })
+</script>
+
+</html>

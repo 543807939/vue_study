@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<script src="../../vue.js"></script>
+
+<body>
+    <div id="app">
+        <my-template></my-template>
+    </div>
+</body>
+<script>
+    const mt = {
+        data: function () {
+            return {
+                msg: 'mt-msg'
+            }
+        },
+        template: `
+            <div>
+                <p>{{msg}}</p>    
+            </div>
+        `
+    }
+    const vm = new Vue({
+        el: '#app',
+        data: {
+
+        },
+        components: {
+            MyTemplate: mt
+        }
+    })
+</script>
+
+</html>
