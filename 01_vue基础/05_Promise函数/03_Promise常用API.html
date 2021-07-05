@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+<script>
+    /*
+        p.then() 得到异步任务的正确结果
+        p.catch() 获取异常信息
+        p.finally() 成功与否都会执行
+    */
+    function foo(msg) {
+        return new Promise(function (resolve, reject) {
+            setTimeout(() => {
+                msg = msg ? msg : '我是信息'
+                // resolve(msg)
+                reject('错误')
+            }, 1000);
+        })
+    }
+
+    foo('嘿嘿嘿')
+        .then(function (data) {
+            console.log(data);
+        })
+        .catch(function (err) {
+            console.log(err);
+        })
+        .finally(function () {
+            console.log('我要执行');
+        })
+</script>
+
+</html>

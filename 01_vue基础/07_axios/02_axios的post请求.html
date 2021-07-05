@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<script src="./axios.js"></script>
+
+<body>
+
+</body>
+<script>
+    axios.post('http://127.0.0.1:3000/people', { name: "张三", gender: 'male', nickname: '法外狂徒' }).then(ret => console.log(ret.data))
+
+    const params = new URLSearchParams()
+    params.append('uname', '张三')
+    params.append('gender', '男')
+    params.append('nickname', '法外狂徒')
+    axios.post('http://127.0.0.1:3000/people', params).then(ret => console.log(ret.data))
+</script>
+
+</html>

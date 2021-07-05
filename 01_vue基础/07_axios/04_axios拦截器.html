@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./axios.js"></script>
+</head>
+
+<body>
+
+</body>
+<script>
+    axios.defaults.baseURL = 'http://127.0.0.1:3000/'
+    axios.interceptors.request.use(function (config) {
+        console.log(config);
+        return config
+    }, function (err) {
+        console.log(err);
+    })
+
+    axios.interceptors.response.use(function (res) {
+        console.log(res);
+        return res.data
+    }, function (err) {
+        console.log(err);
+    })
+    axios.get('/axios-json').then(req => console.log(req))
+</script>
+
+</html>
