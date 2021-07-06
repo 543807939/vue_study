@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../../vue.js"></script>
+    <script src="../../vue-router.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <router-link to="/home/zhangsan">首页</router-link>
+        <router-link to="/home/lisi">首页</router-link>
+        <router-link to="/home/wangwu">首页</router-link>
+        <router-link to="/register">注册</router-link>
+        <router-view></router-view>
+    </div>
+</body>
+<script>
+    const home = {
+        props: ['name', 'gender','id','route'],
+        template: `
+            <div>
+                <h1>{{$route.params.id}}在首页</h1>
+                <h1>{{id}}在首页</h1>
+                <h1>{{name}}</h1>
+                <h1>{{gender}}</h1>
+                <p v-for="(value,key,index) in route">{{key}} --- {{value}}</p>
+            </div>`
+    }
+    const register = {
+        template: `
+            <div>
+                <h1>注册一个吧</h1>
+            </div>`
+    }
+    const router = new VueRouter({
+        routes: [{
+                path: '/',
+                redirect: '/home'
+            },
+            {
+                path: '/home/:id',
+                component: home,
+                props: route => ({
+                    name: '张三',
+                    age: 10,
+                    gender: 'male',
+                    id:route.params.id,
+                    // route
+                })
+            },
+            {
+                path: '/register',
+                component: register
+            },
+
+        ]
+    })
+    const vm = new Vue({
+        el: '#app',
+        router
+    })
+</script>
+
+</html>

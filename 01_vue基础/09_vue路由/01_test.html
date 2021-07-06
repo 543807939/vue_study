@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../../vue.js"></script>
+    <script src="../../vue-router.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <router-link to="/home">首页</router-link>
+        <router-link to="/register">注册</router-link>
+        <router-view></router-view>
+    </div>
+</body>
+<script>
+    const home = {
+        template: `<h1>我在这儿等着你回来</h1>`
+    }
+    const register = {
+        template: `<h1>大爷来玩啊</h1>`
+    }
+    const router = new VueRouter({
+        routes: [
+            {
+                path: '/',
+                redirect: '/home'
+            },
+            {
+                path: '/home',
+                component: home
+            },
+            {
+                path: '/register',
+                component: register
+            },
+
+        ]
+    })
+    const vm = new Vue({
+        el: '#app',
+        router
+    })
+</script>
+
+</html>
