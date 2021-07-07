@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../../vue.js"></script>
+    <script src="../../vue-router.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <router-link to="/user">User</router-link>
+        <router-link to="/register">Register</router-link>
+        <!-- 路由占位符 -->
+        <router-view></router-view>
+    </div>
+</body>
+<script>
+    const user = {
+        template: `<div>
+            <h3>我是用户界面</h3>
+            </div>`
+    }
+
+    const register = {
+        template: `<div>
+            <h3>我是注册界面</h3>
+            </div>`
+    }
+
+    const router = new VueRouter({
+        routes: [
+            {
+                path: '/',
+                redirect: '/user'
+            },
+            {
+                path: '/user',
+                component: user
+            },
+            {
+                path: '/register',
+                component: register
+            },
+        ]
+    })
+
+    const vm = new Vue({
+        el: '#app',
+        router,
+        data: {
+
+        },
+        components: {
+            user, register
+        }
+    })
+
+
+</script>
+
+</html>

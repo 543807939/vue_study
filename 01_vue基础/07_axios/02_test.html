@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./axios.js"></script>
+</head>
+<script>
+    // async function test() {
+    //     var ret = await new Promise(function (resolve, reject) {
+    //         let num = 0
+    //         setTimeout(() => {
+    //             num = 10
+    //             resolve(num)
+    //         }, 1000);
+    //     })
+    //     return ret
+    // }
+    // test().then(data => {
+    //     console.log(data);
+    // })
+    axios.defaults.baseURL = 'http://127.0.0.1:3000/'
+    async function test() {
+        let ret = await axios.post('test', { name: '张三', age: 10 })
+        console.log(ret);
+        return await axios.post('test-new', { id: ret.data })
+    }
+    test().then(ret => { console.log(ret); })
+</script>
+
+<body>
+
+</body>
+
+</html>

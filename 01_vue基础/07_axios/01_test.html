@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./axios.js"></script>
+</head>
+
+<body>
+
+</body>
+<script>
+    /* 
+        get 和 delete 有两种方式传参
+        1. 直接字符串拼接  axios.get('user?name=123')
+        2. 通过params传参 axios.get('user', {
+                                            params: {
+                                                 id: 345
+                                                }
+                                            })
+    */
+
+    /*  
+        post请求有两种传参方式
+        1. 直接传一个对象  axios.post('user',{name:'zhangsan',age:14})
+        2. 传递一个URLSearchParams对象
+                var params = new URLSearchParams()
+                params.append('name', '李四')
+                params.append('nickname', '法外狂徒')
+                params.append('gender', '???')
+                axios.post('user',params)
+    */
+    axios.defaults.baseURL = 'http://127.0.0.1:3000/'
+    axios.interceptors.response.use(function (res) {
+        return res.data
+    })
+    axios.interceptors.request.use(function (config) {
+        console.log(config);
+        return config
+    })
+    axios.defaults.headers['token'] = 'i am token'
+    // axios.get('user?name=123').then(ret => console.log(ret))
+    // axios.get('user/123').then(ret => console.log(ret))
+    axios.get('user', {
+        params: {
+            id: 345
+        }
+    }).then(ret => console.log(ret))
+
+    // axios.post('user', {
+    //     name: '张三',
+    //     age: 14,
+    //     gender: 'male'
+    // }).then(ret => {
+    //     console.log(ret);
+    // })
+
+    var params = new URLSearchParams()
+    params.append('name', '李四')
+    params.append('nickname', '法外狂徒')
+    params.append('gender', '???')
+    // axios.post('user', params).then(ret => { console.log(ret); })
+</script>
+
+</html>

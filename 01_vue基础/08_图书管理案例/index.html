@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./axios.js"></script>
+    <script src="../../vue.js"></script>
+</head>
+<style>
+    .section {
+        width: 600px;
+        margin: 100px auto;
+        text-align: center;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th,
+    td {
+        border: 1px solid #2c3e50;
+        padding: 5px 6px;
+    }
+
+    .total {
+        margin: 10px 0;
+    }
+
+    input {
+        outline: none;
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    form {
+        display: flex;
+        justify-content: space-between;
+        padding: 0 20px;
+    }
+</style>
+
+<body>
+    <div id="app">
+        <my-template></my-template>
+    </div>
+</body>
+<script>
+    axios.defaults.baseURL = 'http://127.0.0.1:3000'
+    axios.interceptors.response.use(function (res) {
+        return res.data
+    })
+    // 创建过滤器来格式化时间
+    Vue.filter('formatTime', function (time) {
+        function addZero(num) {
+            return num > 9 ? num : '0' + num
+        }
+        let date = new Date(time)
+        return `${addZero(date.getFullYear())}-${addZero(date.getMonth() + 1)}-${addZero(date.getDate())} ${addZero(date.getHours())}:${addZero(date.getMinutes())}:${addZero(date.getSeconds())}`
+    })
+
+    // 创建事件中心
+    const eventHub = new Vue()
+
+    Vue.component('MyTemplate', {
+        data: function () {
+            return {
+                title: '图书管理',
+                books: []
+            }
+        },
+        template: `
+            <div class="section">
+                <section-header :title="title"></section-header>
+                <section-form @addBook="addBook($event)"></section-form>
+                <section-total :total="total"></section-total>
+                <section-table :books="books" @deleteBook="deleteBook($event)"></section-table>
+            </div>
+        `,
+
+        computed: {
+            total: function () {
+                return this.books.length
+            }
+        },
+        methods: {
+            deleteBook: function (id) {
+                axios.delete('books/' + id).then(ret => console.log(ret))
+                this.queryBooks()
+            },
+            queryBooks: async function () {
+                this.books = await axios.get('books')
+            },
+            addBook: async function (book) {
+                if (!book.id) {
+                    // 添加图书
+                    let flag = await axios.get('books/book/' + book.name)
+                    console.log(flag);
+                    if (flag.status === 2) {
+                        axios.post('books', book).then(ret => { console.log(ret); })
+                    } else {
+                        console.log('该图书已存在');
+                    }
+
+                } else {
+                    // 修改图书
+                    axios.put('books/' + book.id, { name: book.name }).then(ret => console.log(ret))
+                }
+            }
+        },
+        mounted: function () {
+            this.queryBooks()
+        },
+    })
+    Vue.component('section-header', {
+        props: ['title'],
+        template: `
+            <h3>{{title}}</h3>
+        `
+    })
+    Vue.component('section-form', {
+        data: function () {
+            return {
+                newBook: {
+                    id: '',
+                    name: '',
+                }
+            }
+        },
+        template: `
+            <form @submit.prevent>
+                <div><label for="num">编号：</label>
+                    <input type="text" id="num" disabled v-model.lazy="newBook.id">
+                </div>
+                <div><label for="name">名称：</label>
+                    <input type="text" id="name" v-model.lazy="newBook.name">
+                </div>
+                <button @click="referTo">提交</button>
+            </form>
+        `,
+        methods: {
+            referTo: function () {
+                this.$emit('addBook', this.newBook)
+            }
+        },
+        mounted: function () {
+            eventHub.$on('modify', book => {
+                this.newBook = book
+            })
+        }
+    })
+    Vue.component('section-total', {
+        props: ['total'],
+        template: `
+        <div class="total">图书总数：<span>{{total}}</span></div>
+        `
+    })
+    Vue.component('section-table', {
+        props: ['books'],
+        template: `
+        <table>
+                <thead>
+                    <tr>
+                        <th>编号</th>
+                        <th>名称</th>
+                        <th>时间</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr :key=item.id v-for="item in books">
+                        <td>{{item.id}}</td>
+                        <td>{{item.name}}</td>
+                        <td>{{item.date | formatTime}}</td>
+                        <td><a href="" @click.prevent="modify(item.id)">修改</a> | <a href="javascript:;" @click.prevent ="del(item.id)">删除</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        `,
+        methods: {
+            del: function (id) {
+                this.$emit('deleteBook', id)
+            },
+            modify: async function (id) {
+                let book = await axios.get('books/' + id)
+                eventHub.$emit('modify', book)
+            }
+        }
+    })
+    const app = new Vue({
+        el: '#app'
+    })
+</script>
+
+</html>
