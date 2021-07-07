@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../../vue.js"></script>
+    <script src="../../vue-router.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <router-link to="/home/lisi">首页</router-link>
+        <router-link to="/register">注册</router-link>
+        <router-view></router-view>
+    </div>
+</body>
+<script>
+    const home = {
+        template: `
+            <div>
+                <h2>{{$route.params.id}}的首页</h2>
+                <router-link to="/home/zhangsan/message">私信</router-link>
+                <router-link to="/home/zhangsan/email">邮箱</router-link>
+                <router-view/>
+            </div>
+        `
+    }
+    const message = {
+        template: `
+            <div>
+                <h4>{{$route.params.id}},没人找你</h4>
+            </div>`
+    }
+    const email = {
+        props: ['num', 'list'],
+        template: `
+            <div>
+                <h4>{{num}}封新邮件</h4>
+                <ul>
+                    <li v-for="item in list">
+                        <p><strong>{{item.name}}</strong>   : <span v-text="item.contain"></span></p>
+                    </li>
+                </ul>
+            </div>`
+    }
+    const register = {
+        template: `
+            <div>
+                <h2>注册页面</h2>
+                <router-link to="/register/user">普通用户注册</router-link>
+                <router-link to="/register/vip">尊贵VIP用户注册</router-link>
+                <router-view/>
+            </div>
+        `
+    }
+    const user = {
+        template: `
+            <div>
+                <h4>没钱别玩</h4>
+            </div>
+        `
+    }
+    const vip = {
+        template: `
+            <div>
+                <h4>欢迎您,家人</h4>
+            </div>
+        `
+    }
+    const router = new VueRouter({
+        routes: [
+            {
+                path: '/',
+                redirect: '/home/zhangsan'
+            },
+            {
+                path: '/home/:id',
+                component: home,
+                children: [
+                    {
+                        path: '/home/:id/message',
+                        component: message
+                    },
+                    {
+                        path: '/home/:id/email',
+                        component: email,
+                        props: {
+                            num: 10,
+                            list: [
+                                {
+                                    name: '张三',
+                                    contain: '在吗'
+                                },
+                                {
+                                    name: '网五月',
+                                    contain: '一起去吃饭?'
+                                },
+                                {
+                                    name: '老妈',
+                                    contain: '今晚回家吃饭吗'
+                                },
+                            ]
+                        }
+                    },
+                ]
+            },
+            {
+                path: '/register',
+                component: register,
+                children: [
+                    {
+                        path: '/register/user',
+                        component: user
+                    },
+                    {
+                        path: '/register/vip',
+                        component: vip
+                    },
+                ]
+            },
+        ]
+    })
+    const vm = new Vue({
+        el: '#app',
+        router
+    })
+</script>
+
+</html>

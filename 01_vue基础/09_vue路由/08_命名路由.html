@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../../vue.js"></script>
+    <script src="../../vue-router.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <router-link to="/home/lisi">首页</router-link>
+        <router-link :to="{name:'home',params:{id:'hei'}}">首页(命名路由跳转)</router-link>
+        <router-link to="/register">注册</router-link>
+        <router-view />
+    </div>
+</body>
+<script>
+    const home = {
+        props: ['id'],
+        template: `
+            <div>
+                <h3>欢迎,{{id}}</h3>
+            </div>
+        `
+    }
+    const register = {
+        template: `
+            <div>
+                <h3>注册一个吧</h3>
+            </div>
+        `
+    }
+    const router = new VueRouter({
+        routes: [
+            {
+                path: '/',
+                redirect: '/home/zhangsan'
+            },
+            {
+                path: '/home/:id',
+                name: 'home',
+                component: home,
+                props: true
+            },
+            {
+                path: '/register',
+                name: 'register',
+                component: register
+            },
+        ]
+    })
+    const vm = new Vue({
+        el: '#app',
+        router
+    })
+</script>
+
+</html>

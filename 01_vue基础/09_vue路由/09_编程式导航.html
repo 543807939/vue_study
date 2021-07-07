@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../../vue.js"></script>
+    <script src="../../vue-router.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <router-link to="home">首页</router-link>
+        <router-link to="register">注册</router-link>
+        <router-view />
+    </div>
+</body>
+<script>
+    const home = {
+        props: ['name', 'age', 'gender', 'nickname'],
+        template: `
+            <div>
+                <h3>欢迎,{{name}}</h3>
+                <p>{{age}} --- {{gender}} --- {{nickname}}</p>
+            </div>
+        `
+    }
+    const register = {
+        props: [],
+        template: `
+            <div>
+                <h3>加入我们吧</h3>
+                <button @click="reigster">我要加入</button>
+            </div>
+        `,
+        methods: {
+            reigster: function () {
+                this.$router.push({ name: 'home', params: { name: '嘿嘿嘿', age: 101, gender: '???', nickname: '费玉清' } })
+            }
+        }
+    }
+    const router = new VueRouter({
+        routes: [
+            {
+                path: '/',
+                redirect: '/home'
+            },
+            {
+                path: '/home',
+                name: 'home',
+                component: home,
+                props: {
+                    name: '张三',
+                    age: 14,
+                    gender: 'male',
+                    nickname: '法外狂徒'
+                }
+            },
+            {
+                path: '/register',
+                name: 'register',
+                component: register
+            },
+        ]
+    })
+    const vm = new Vue({
+        el: '#app',
+        router
+    })
+</script>
+
+</html>
