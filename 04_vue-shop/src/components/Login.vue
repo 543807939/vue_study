@@ -6,26 +6,78 @@
         <img src="../assets/images/avatar.jpg" alt />
       </div>
       <!-- 登陆表单区域 -->
-      <el-form class="login-form">
+      <el-form
+        ref="loginFormRef"
+        class="login-form"
+        :model="loginForm"
+        :rules="loginFormRules"
+      >
         <!-- 用户名 -->
-        <el-form-item>
-          <el-input></el-input>
+        <el-form-item prop="username">
+          <el-input
+            prefix-icon="iconfont icon-icon-user"
+            v-model.lazy="loginForm.username"
+          ></el-input>
         </el-form-item>
         <!-- 密码 -->
-        <el-form-item>
-          <el-input></el-input>
+        <el-form-item prop="password">
+          <el-input
+            prefix-icon="iconfont icon-password"
+            v-model.lazy="loginForm.password"
+            type="password"
+          ></el-input>
         </el-form-item>
         <!-- 按钮区域 -->
         <el-form-item class="btns">
           <el-button type="primary">登陆</el-button>
-          <el-button type="info">重置</el-button>
+          <el-button type="info" v-on:click="resetLoginForm">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
   </div>
 </template>
 <script>
-export default {}
+export default {
+  data() {
+    return {
+      // 登录表单的数据绑定对象
+      loginForm: {
+        username: "",
+        password: "",
+      },
+      loginFormRules: {
+        username: [
+          { required: true, message: "请输入用户名", trigger: "blur" },
+          {
+            min: 3,
+            max: 10,
+            message: "长度在3-10之间",
+            trigger: "blur",
+          },
+        ],
+        password: [
+          {
+            required: true,
+            message: "请输入登陆密码",
+            trigger: "blur",
+          },
+          {
+            min: 6,
+            max: 14,
+            message: "长度在6-14之间",
+            trigger: "blur",
+          },
+        ],
+      },
+    };
+  },
+  methods: {
+    // 点击重置按钮 重置登录表单
+    resetLoginForm: function () {
+      this.$refs.loginFormRef.resetFields()
+    },
+  },
+};
 </script>
 <style lang="less" scoped>
 .login-container {

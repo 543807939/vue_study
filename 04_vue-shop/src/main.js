@@ -2,6 +2,9 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 
+// 引入阿里图标
+import './assets/font/iconfont.css'
+
 // 引入全局样式表
 import './assets/css/global.css'
 
