@@ -22,9 +22,9 @@ axios.interceptors.request.use(config => {
   return config
 })
 // 响应拦截器
-axios.interceptors.response.use(res => {
-  return res.data
-})
+// axios.interceptors.response.use(res => {
+//   return res.data
+// })
 Vue.prototype.$http = axios
 
 // 全局配置message
