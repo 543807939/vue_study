@@ -18,10 +18,13 @@ const routes = [{
     component: () => import('../components/Welcome.vue'),
   }, {
     path: '/users',
-    component:()=>import('../components/user/User.vue')
-  },{
-    path:'/rights',
-    component:()=>import('../components/power/Rights.vue')
+    component: () => import('../components/user/User.vue')
+  }, {
+    path: '/rights',
+    component: () => import('../components/power/Rights.vue')
+  }, {
+    path: '/roles',
+    component: () => import('../components/power/Roles.vue')
   }]
 }]
 
