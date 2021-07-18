@@ -48,11 +48,19 @@
           >
           <el-tag size="mini" v-else type="warning">三级</el-tag>
         </template>
-        <template slot="opt">
-          <el-button size="mini" type="primary" icon="el-icon-search"
-            >搜索</el-button
+        <template slot="opt" slot-scope="scope">
+          <el-button
+            size="mini"
+            type="primary"
+            icon="el-icon-edit"
+            @click="showEidtDialog(scope.row.cat_id)"
+            >编辑</el-button
           >
-          <el-button size="mini" type="danger" icon="el-icon-delete"
+          <el-button
+            size="mini"
+            type="danger"
+            icon="el-icon-delete"
+            @click="deleteCate(scope.row.cat_id)"
             >删除</el-button
           >
         </template>
@@ -96,9 +104,29 @@
         </el-form>
         <span slot="footer" class="dialog-footer">
           <el-button @click="addClassDiolagVisible = false">取 消</el-button>
-          <el-button type="primary" @click="addClass"
-            >确 定</el-button
-          >
+          <el-button type="primary" @click="addClass">确 定</el-button>
+        </span>
+      </el-dialog>
+      <!-- 编辑分类弹窗 -->
+      <el-dialog
+        title="编辑分类"
+        :visible.sync="editCateDialogVisible"
+        width="50%"
+        @close="optClose"
+      >
+        <el-form
+          :model="editClass"
+          ref="editClassRef"
+          :rules="newClassRules"
+          label-width="100px"
+        >
+          <el-form-item label="分类名称" prop="cat_name">
+            <el-input v-model="editClass.cat_name"></el-input>
+          </el-form-item>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="editCateDialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="editCate">确 定</el-button>
         </span>
       </el-dialog>
     </el-card>
@@ -171,6 +199,12 @@ export default {
       },
       // 选中的父级分类数组
       selectedKeys: [],
+      // 编辑分类弹窗是否展示
+      editCateDialogVisible: false,
+      // 操作时传递的id
+      optId: "",
+      // 修改分类的表单
+      editClass: {},
     };
   },
   methods: {
@@ -205,45 +239,101 @@ export default {
         return this.$message.error("获取分类数据失败!");
       }
       this.parentCateList = res.data;
-
     },
     // 级联选择器值改变
     parentCateChange() {
       console.log(this.selectedKeys);
-      if(this.selectedKeys.length > 0){
-        this.newClass.cat_pid = this.selectedKeys[this.selectedKeys.length-1]
-        this.newClassRules.cat_level = this.selectedKeys.length
-      }else{
-         this.newClass.cat_pid = 0
-         this.newClassRules.cat_level = 0
+      if (this.selectedKeys.length > 0) {
+        this.newClass.cat_pid = this.selectedKeys[this.selectedKeys.length - 1];
+        this.newClassRules.cat_level = this.selectedKeys.length;
+      } else {
+        this.newClass.cat_pid = 0;
+        this.newClassRules.cat_level = 0;
       }
     },
     // 关闭弹窗处理函数
     addClassClose() {
-      this.$refs.newClassRef.resetFields()
-      this.selectedKeys = []
-      this.newClass= {
+      this.$refs.newClassRef.resetFields();
+      this.selectedKeys = [];
+      this.newClass = {
         cat_name: "",
         cat_id: 0,
         cat_level: 0,
-      }
+      };
     },
     // 提交表单
-    addClass(){
-      this.$refs.newClassRef.validate(async flag =>{
-        if(!flag){
-          return
+    addClass() {
+      this.$refs.newClassRef.validate(async (flag) => {
+        if (!flag) {
+          return;
         }
-        let {data:res} = await this.$http.post('categories',this.newClass)
-        if(res.meta.status !== 200){
-          this.$message.error('添加新分类失败!')
+        let { data: res } = await this.$http.post("categories", this.newClass);
+        if (res.meta.status !== 200) {
+          this.$message.error("添加新分类失败!");
         }
         console.log(res);
         this.getGoodsCategories();
-        this.$message.success('添加分类成功')
-        this.addClassDiolagVisible = false
-      })
-    }
+        this.$message.success("添加分类成功");
+        this.addClassDiolagVisible = false;
+      });
+    },
+    // 打开编辑分类弹窗
+    async showEidtDialog(id) {
+      this.optId = id;
+      // 根据id获取分类数据
+      let { data: res } = await this.$http.get(`categories/${this.optId}`);
+      if (res.meta.status !== 200) {
+        return this.$message.error("获取用户信息失败!");
+      }
+      this.editClass = res.data;
+      this.editCateDialogVisible = true;
+    },
+    // 提交编辑
+    editCate() {
+      // 先对表单进行验证
+      this.$refs.editClassRef.validate(async (flag) => {
+        if (!flag) {
+          return;
+        }
+        // 验证通过,执行提交操作
+        let { data: res } = await this.$http.put(`categories/${this.optId}`, {
+          cat_name: this.editClass.cat_name,
+        });
+        if (res.meta.status !== 200) {
+          return this.$message.error("更新分类失败!");
+        }
+        this.getGoodsCategories();
+        this.$message.success("更新分类成功!");
+        this.editCateDialogVisible = false;
+      });
+    },
+    // 删除分类
+    async deleteCate(id) {
+      this.optId = id;
+      let confirmResult = await this.$confirm(
+        "此操作将永久删除该分类, 是否继续?",
+        "提示",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        }
+      ).catch((err) => err);
+      if(confirmResult == 'cancel'){
+        return
+      }
+      // 确认删除 执行删除操作
+      let {data:res} = await this.$http.delete('categories/'+this.optId)
+      if(res.meta.status!==200){
+        return this.$message.error('删除失败!')
+      }
+      this.$message.success('删除成功!')
+      this.getGoodsCategories();
+    },
+    // 操作关闭时重置操作id
+    optClose() {
+      this.optId = "";
+    },
   },
   created() {
     this.getGoodsCategories();
