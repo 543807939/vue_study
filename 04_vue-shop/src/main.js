@@ -13,6 +13,10 @@ import '../node_modules/element-ui/lib/theme-chalk/index.css'
 
 Vue.use(Element)
 
+// 引入vue-table-with-tree-grid
+import ZKTable from 'vue-table-with-tree-grid'
+Vue.component('tree-table', ZKTable)
+
 // 引入axios
 import axios from 'axios'
 axios.defaults.baseURL = 'http://127.0.0.1:8888/api/private/v1/'
