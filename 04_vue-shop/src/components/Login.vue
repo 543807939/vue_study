@@ -6,15 +6,11 @@
         <img src="../assets/images/avatar.jpg" alt />
       </div>
       <!-- 登陆表单区域 -->
-      <el-form
-        ref="loginFormRef"
-        class="login-form"
-        :model="loginForm"
-        :rules="loginFormRules"
-      >
+      <el-form ref="loginFormRef" class="login-form" :model="loginForm" :rules="loginFormRules">
         <!-- 用户名 -->
         <el-form-item prop="username">
           <el-input
+            ref="usernameRef"
             prefix-icon="iconfont icon-icon-user"
             v-model.lazy="loginForm.username"
           ></el-input>
@@ -42,57 +38,60 @@ export default {
     return {
       // 登录表单的数据绑定对象
       loginForm: {
-        username: "admin",
-        password: "123456",
+        username: 'admin',
+        password: '123456',
       },
       loginFormRules: {
         username: [
-          { required: true, message: "请输入用户名", trigger: "blur" },
+          { required: true, message: '请输入用户名', trigger: 'blur' },
           {
             min: 3,
             max: 10,
-            message: "长度在3-10之间",
-            trigger: "blur",
+            message: '长度在3-10之间',
+            trigger: 'blur',
           },
         ],
         password: [
           {
             required: true,
-            message: "请输入登陆密码",
-            trigger: "blur",
+            message: '请输入登陆密码',
+            trigger: 'blur',
           },
           {
             min: 6,
             max: 14,
-            message: "长度在6-14之间",
-            trigger: "blur",
+            message: '长度在6-14之间',
+            trigger: 'blur',
           },
         ],
       },
-    };
+    }
   },
   methods: {
     // 点击重置按钮 重置登录表单
     resetLoginForm: function () {
-      this.$refs.loginFormRef.resetFields();
+      this.$refs.loginFormRef.resetFields()
     },
     login: function () {
       this.$refs.loginFormRef.validate(async (flag) => {
         if (!flag) {
-          return;
+          return
         }
-        const { data: res } = await this.$http.post("login", this.loginForm);
+        const { data: res } = await this.$http.post('login', this.loginForm)
         if (res.meta.status === 400) {
-          this.$message.error("登陆失败!");
+          this.$message.error('登陆失败!')
         } else {
-          this.$message.success("登陆成功!");
-          window.sessionStorage.setItem("token", res.data.token);
-          this.$router.push("/home");
+          this.$message.success('登陆成功!')
+          window.sessionStorage.setItem('token', res.data.token)
+          this.$router.push('/home')
         }
-      });
+      })
     },
   },
-};
+  mounted() {
+    this.$refs.usernameRef.$refs.input.focus()
+  },
+}
 </script>
 <style lang="less" scoped>
 .login-container {
