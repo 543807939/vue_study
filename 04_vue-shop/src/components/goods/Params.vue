@@ -10,7 +10,12 @@
     <!-- 卡片区域 -->
     <el-card>
       <!-- 警告区域 -->
-      <el-alert title="注意:只可以为第三级菜单设置参数!" type="warning" :closable="false" show-icon></el-alert>
+      <el-alert
+        title="注意:只可以为第三级菜单设置参数!"
+        type="warning"
+        :closable="false"
+        show-icon
+      ></el-alert>
       <!-- 选择商品分类区域 -->
       <el-row class="cat_opt">
         <el-col>
@@ -35,7 +40,8 @@
                 type="primary"
                 :disabled="addBtnDisabled"
                 @click="showAddAttrDialog"
-              >添加参数</el-button>
+                >添加参数</el-button
+              >
             </el-col>
           </el-row>
           <!-- 动态参数表格 -->
@@ -45,67 +51,12 @@
               <template slot-scope="scope">
                 <el-tag
                   :key="index"
-                  v-for="(item,index) in scope.row.attr_vals"
+                  v-for="(item, index) in scope.row.attr_vals"
                   closable
+                  @close="handleClose(scope.row, index)"
                   :disable-transitions="false"
-                >{{item}}</el-tag>
-                <el-input
-                  class="input-new-tag"
-                  v-if="inputVisible"
-                  v-model="newValue"
-                  ref="newValueRef"
-                  size="small"
-                  @keyup.enter.native="handleInputConfirm"
-                  @blur="handleInputConfirm"
-                ></el-input>
-                <el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
-              </template>
-            </el-table-column>
-            <!-- 索引 -->
-            <el-table-column type="index" label="#">
-              <template slot-scope></template>
-            </el-table-column>
-            <el-table-column label="参数名称" prop="attr_name"></el-table-column>
-            <el-table-column label="操作">
-              <template slot-scope="scope">
-                <el-button
-                  type="primary"
-                  size="small"
-                  icon="el-icon-edit"
-                  @click="showEditDialog(scope.row)"
-                >修改</el-button>
-                <el-button
-                  type="danger"
-                  size="small"
-                  icon="el-icon-delete"
-                  @click="deleteAttr(scope.row.attr_id)"
-                >删除</el-button>
-              </template>
-            </el-table-column>
-          </el-table>
-        </el-tab-pane>
-        <el-tab-pane label="静态属性" name="only">
-          <el-row>
-            <el-col>
-              <el-button
-                size="small"
-                type="primary"
-                :disabled="addBtnDisabled"
-                @click="showAddAttrDialog"
-              >添加属性</el-button>
-            </el-col>
-          </el-row>
-          <!-- 静态属性表格 -->
-          <el-table :data="onlyTableData" border stripe>
-            <!-- 展开行 -->
-            <el-table-column type="expand">
-              <template slot-scope="scope">
-                <el-tag
-                  :key="index"
-                  v-for="(item,index) in scope.row.attr_vals"
-                  closable
-                  :disable-transitions="false"
-                >{{item}}</el-tag>
+                  >{{ item }}</el-tag
+                >
                 <el-input
                   class="input-new-tag"
                   v-if="scope.row.inputVisible"
@@ -120,14 +71,18 @@
                   class="button-new-tag"
                   size="small"
                   @click="showInput(scope.row)"
-                >+ New Tag</el-button>
+                  >+ New Tag</el-button
+                >
               </template>
             </el-table-column>
             <!-- 索引 -->
             <el-table-column type="index" label="#">
               <template slot-scope></template>
             </el-table-column>
-            <el-table-column label="属性名称" prop="attr_name"></el-table-column>
+            <el-table-column
+              label="参数名称"
+              prop="attr_name"
+            ></el-table-column>
             <el-table-column label="操作">
               <template slot-scope="scope">
                 <el-button
@@ -135,13 +90,86 @@
                   size="small"
                   icon="el-icon-edit"
                   @click="showEditDialog(scope.row)"
-                >修改</el-button>
+                  >修改</el-button
+                >
                 <el-button
                   type="danger"
                   size="small"
                   icon="el-icon-delete"
                   @click="deleteAttr(scope.row.attr_id)"
-                >删除</el-button>
+                  >删除</el-button
+                >
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-tab-pane>
+        <el-tab-pane label="静态属性" name="only">
+          <el-row>
+            <el-col>
+              <el-button
+                size="small"
+                type="primary"
+                :disabled="addBtnDisabled"
+                @click="showAddAttrDialog"
+                >添加属性</el-button
+              >
+            </el-col>
+          </el-row>
+          <!-- 静态属性表格 -->
+          <el-table :data="onlyTableData" border stripe>
+            <!-- 展开行 -->
+            <el-table-column type="expand">
+              <template slot-scope="scope">
+                <el-tag
+                  :key="index"
+                  v-for="(item, index) in scope.row.attr_vals"
+                  closable
+                  @close="handleClose(scope.row, index)"
+                  :disable-transitions="false"
+                  >{{ item }}</el-tag
+                >
+                <el-input
+                  class="input-new-tag"
+                  v-if="scope.row.inputVisible"
+                  v-model="scope.row.newValue"
+                  ref="newValueRef"
+                  size="small"
+                  @keyup.enter.native="handleInputConfirm(scope.row)"
+                  @blur="handleInputConfirm(scope.row)"
+                ></el-input>
+                <el-button
+                  v-else
+                  class="button-new-tag"
+                  size="small"
+                  @click="showInput(scope.row)"
+                  >+ New Tag</el-button
+                >
+              </template>
+            </el-table-column>
+            <!-- 索引 -->
+            <el-table-column type="index" label="#">
+              <template slot-scope></template>
+            </el-table-column>
+            <el-table-column
+              label="属性名称"
+              prop="attr_name"
+            ></el-table-column>
+            <el-table-column label="操作">
+              <template slot-scope="scope">
+                <el-button
+                  type="primary"
+                  size="small"
+                  icon="el-icon-edit"
+                  @click="showEditDialog(scope.row)"
+                  >修改</el-button
+                >
+                <el-button
+                  type="danger"
+                  size="small"
+                  icon="el-icon-delete"
+                  @click="deleteAttr(scope.row.attr_id)"
+                  >删除</el-button
+                >
               </template>
             </el-table-column>
           </el-table>
@@ -155,7 +183,12 @@
         @close="addDialogClose"
       >
         <!-- 添加参数表单 -->
-        <el-form :model="addForm" :rules="addFormRules" ref="addFormRef" label-width="100px">
+        <el-form
+          :model="addForm"
+          :rules="addFormRules"
+          ref="addFormRef"
+          label-width="100px"
+        >
           <el-form-item :label="addDialogLabel" prop="attr_name">
             <el-input v-model="addForm.attr_name"></el-input>
           </el-form-item>
@@ -173,7 +206,12 @@
         @close="editDialogClose"
       >
         <!-- 修改参数表单 -->
-        <el-form :model="editForm" :rules="addFormRules" ref="editFormRef" label-width="100px">
+        <el-form
+          :model="editForm"
+          :rules="addFormRules"
+          ref="editFormRef"
+          label-width="100px"
+        >
           <el-form-item :label="addDialogLabel" prop="attr_name">
             <el-input v-model="editForm.attr_name"></el-input>
           </el-form-item>
@@ -194,15 +232,15 @@ export default {
       cateList: [],
       // 级联选择器props对象
       catSelectProps: {
-        expandTrigger: 'hover',
-        value: 'cat_id',
-        label: 'cat_name',
-        children: 'children',
+        expandTrigger: "hover",
+        value: "cat_id",
+        label: "cat_name",
+        children: "children",
       },
       // 选中的分类
       selectCate: [],
       // 当前活跃的tab
-      activeTab: 'many',
+      activeTab: "many",
       // 动态参数数据
       manyTableData: [],
       // 静态参数数据
@@ -210,16 +248,16 @@ export default {
       // 添加对话框的显示隐藏
       addAttrDialogVisible: false,
       // 添加参数的对象
-      addForm: { attr_name: '' },
+      addForm: { attr_name: "" },
       // 添加参数的验证规则
       addFormRules: {
         attr_name: [
           {
             required: true,
             message: `请输入参数名称`,
-            trigger: 'blur',
+            trigger: "blur",
           },
-          { min: 2, max: 8, message: '长度在 2 到 8 个字符', trigger: 'blur' },
+          { min: 2, max: 8, message: "长度在 2 到 8 个字符", trigger: "blur" },
         ],
       },
       // 编辑的对话框是否展示
@@ -227,35 +265,38 @@ export default {
       // 编辑的对象
       editForm: {},
       // 新添加属性的值
-      newValue: '',
+      newValue: "",
       // 输入框是否显示
       inputVisible: false,
-    }
+    };
   },
   methods: {
     async getCateList() {
-      let { data: res } = await this.$http.get('categories', {
+      let { data: res } = await this.$http.get("categories", {
         params: {
           type: 3,
         },
-      })
+      });
       if (res.meta.status !== 200) {
-        return this.$message.error('获取分类列表失败!')
+        return this.$message.error("获取分类列表失败!");
       }
-      this.cateList = res.data
+      this.cateList = res.data;
     },
     selectCateChange() {
       if (this.selectCate.length !== 3) {
-        return (this.selectCate = [])
+        this.selectCate = []
+        this.manyTableData = []
+        this.onlyTableData = []
+        return 
       }
-      this.getAttr()
+      this.getAttr();
     },
     // 点击页签触发
     handleTabClick() {
       if (this.addBtnDisabled) {
-        return
+        return;
       }
-      this.getAttr()
+      this.getAttr();
     },
     // 获取参数
     async getAttr() {
@@ -266,38 +307,37 @@ export default {
             sel: this.activeTab,
           },
         }
-      )
+      );
       if (res.meta.status !== 200) {
-        return this.$message.error('获取参数失败!')
+        return this.$message.error("获取参数失败!");
       }
       res.data.forEach((element) => {
         element.attr_vals = element.attr_vals
-          ? element.attr_vals.split(' ')
-          : []
+          ? element.attr_vals.split(" ")
+          : [];
         // 控制输入框的显示与隐藏
-        element.inputVisible = false
-        element.newValue = ''
-      })
-      console.log(res.data)
-      if (this.activeTab == 'many') {
-        this.manyTableData = res.data
+        element.inputVisible = false;
+        element.newValue = "";
+      });
+      if (this.activeTab == "many") {
+        this.manyTableData = res.data;
       } else {
-        this.onlyTableData = res.data
+        this.onlyTableData = res.data;
       }
     },
     // 关闭添加参数框时reset表单
     addDialogClose() {
-      this.$refs.addFormRef.resetFields()
+      this.$refs.addFormRef.resetFields();
     },
     // 点击添加参数
     showAddAttrDialog() {
-      this.addAttrDialogVisible = true
+      this.addAttrDialogVisible = true;
     },
     // 添加参数操作
     addAttr() {
       this.$refs.addFormRef.validate(async (flag) => {
         if (!flag) {
-          return
+          return;
         }
         // 验证通过
         let { data: res } = await this.$http.post(
@@ -306,37 +346,36 @@ export default {
             attr_name: this.addForm.attr_name,
             attr_sel: this.activeTab,
           }
-        )
+        );
         if (res.meta.status !== 201) {
-          return this.$message.error('添加参数失败!')
+          return this.$message.error("添加参数失败!");
         }
-        this.$message.success('添加参数成功!')
-        console.log(res)
-        this.getAttr()
-        this.addAttrDialogVisible = false
-      })
+        this.$message.success("添加参数成功!");
+        this.getAttr();
+        this.addAttrDialogVisible = false;
+      });
     },
     // 关闭编辑窗口
     editDialogClose() {
-      this.$refs.editFormRef.resetFields()
+      this.$refs.editFormRef.resetFields();
     },
     // 点击编辑
     async showEditDialog(goods) {
       let { data: res } = await this.$http.get(
         `categories/${this.cateId}/attributes/${goods.attr_id}`
-      )
+      );
       if (res.meta.status !== 200) {
-        return this.$message.error('获取信息失败!')
+        return this.$message.error("获取信息失败!");
       }
       // 获取信息成功
-      this.editForm = res.data
-      this.editAttrDialogVisible = true
+      this.editForm = res.data;
+      this.editAttrDialogVisible = true;
     },
     // 提交编辑操作
     editAttr() {
       this.$refs.editFormRef.validate(async (flag) => {
         if (!flag) {
-          return
+          return;
         }
         // 验证通过,执行提交操作
         let { data: res } = await this.$http.put(
@@ -345,80 +384,118 @@ export default {
             attr_name: this.editForm.attr_name,
             attr_sel: this.activeTab,
           }
-        )
+        );
         if (res.meta.status !== 200) {
-          return this.$message.error('修改属性失败!')
+          return this.$message.error("修改属性失败!");
         }
-        this.getAttr()
-        this.$message.success('修改属性成功!')
-        this.editAttrDialogVisible = false
-      })
+        this.getAttr();
+        this.$message.success("修改属性成功!");
+        this.editAttrDialogVisible = false;
+      });
     },
     // 点击删除
     async deleteAttr(id) {
       let confirmResult = await this.$confirm(
-        '此操作将永久删除该属性, 是否继续?',
-        '提示',
+        "此操作将永久删除该属性, 是否继续?",
+        "提示",
         {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning',
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
         }
-      ).catch((err) => err)
-      if (confirmResult === 'cancel') {
-        return
+      ).catch((err) => err);
+      if (confirmResult === "cancel") {
+        return;
       }
       // 确认删除
       let { data: res } = await this.$http.delete(
         `categories/${this.cateId}/attributes/${id}`
-      )
+      );
       if (res.meta.status !== 200) {
-        return this.$message.error('删除失败!')
+        return this.$message.error("删除失败!");
       }
-      this.getAttr()
-      this.$message.success('删除成功!')
+      this.getAttr();
+      this.$message.success("删除成功!");
     },
     // 点击+NewTag 显示输入框
     showInput(row) {
-      row.inputVisible = true
+      row.inputVisible = true;
       // 让文本框自动获得焦点
       // this.$nextTick 页面重新渲染之后调用这个函数
       this.$nextTick(() => {
-        this.$refs.newValueRef.$refs.input.focus()
-      })
+        this.$refs.newValueRef.$refs.input.focus();
+      });
     },
     // 输入框失去焦点或按下回车
     handleInputConfirm(row) {
-      row.inputVisible = false
+      // 如果为空
+      if (row.newValue.trim().length == 0) {
+        row.newValue = "";
+        row.inputVisible = false;
+        return;
+      }
+      // 如果不为空 发送请求
+      row.attr_vals.push(row.newValue.trim());
+      row.newValue = "";
+      row.inputVisible = false;
+      // 发起请求
+      this.saveAttrVals(row).then((res) => {
+        if (res.meta.status !== 200) {
+          return this.$message.error("添加失败!");
+        }
+        this.$message.success("添加成功!");
+      });
+    },
+    // 删除标签
+    async handleClose(row, i) {
+      row.attr_vals.splice(i, 1);
+      this.saveAttrVals(row).then((res) => {
+        if (res.meta.status !== 200) {
+          return this.$message.error("删除失败!");
+        }
+        this.$message.success("删除成功!");
+      });
+    },
+    // 修改参数
+    async saveAttrVals(row) {
+      let { data: res } = await this.$http.put(
+        `categories/${this.cateId}/attributes/${row.attr_id}`,
+        {
+          attr_name: row.attr_name,
+          attr_sel: this.activeTab,
+          attr_vals: row.attr_vals.join(" "),
+        }
+      );
+      return res;
     },
   },
   computed: {
     addBtnDisabled() {
-      return !(this.selectCate.length == 3)
+      return !(this.selectCate.length == 3);
     },
     cateId() {
       if (this.selectCate.length == 3) {
-        return this.selectCate[this.selectCate.length - 1]
+        return this.selectCate[this.selectCate.length - 1];
       }
-      return null
+      return null;
     },
     // 标题文本
     addDialogTitle() {
-      return this.activeTab == 'many' ? '添加参数' : '添加属性'
+      return this.activeTab == "many" ? "添加参数" : "添加属性";
     },
     // label
     addDialogLabel() {
-      return this.activeTab == 'many' ? '参数名称' : '属性名称'
+      return this.activeTab == "many" ? "参数名称" : "属性名称";
     },
     // 编辑的标题
     editDialogTitle() {
-      return this.activeTab == 'many' ? '编辑参数' : '编辑属性'
+      return this.activeTab == "many" ? "编辑参数" : "编辑属性";
     },
   },
   created() {
-    this.getCateList()
+    this.getCateList();
   },
-}
+};
 </script>
 <style lang="less" scoped>
 .cat_opt {
