@@ -34,6 +34,12 @@ Vue.prototype.$http = axios
 // 全局配置message
 // Vue.prototype.$message = Element.Message
 
+// 注册时间过滤器
+Vue.filter('dateFormat', (date) => {
+  let time = new Date(date)
+  return `${(time.getFullYear() + '').padStart(2, 0)}-${(time.getMonth() + 1 + '0').padStart(2, 0)}-${(time.getDate() + '').padStart(2, 0)} ${(time.getHours() + '').padStart(2, 0)}:${(time.getMinutes() + '').padStart(2, 0)}:${(time.getSeconds() + '').padStart(2, 0)}`
+})
+
 Vue.config.productionTip = false
 
 new Vue({
