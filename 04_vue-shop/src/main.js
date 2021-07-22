@@ -23,20 +23,27 @@ import 'quill/dist/quill.core.css' // import styles
 import 'quill/dist/quill.snow.css' // for snow theme
 import 'quill/dist/quill.bubble.css' // for bubble theme
 
-Vue.use(VueQuillEditor, /* { default global options } */ )
+Vue.use(VueQuillEditor, /* { default global options } */)
 
 // 引入axios
 import axios from 'axios'
 axios.defaults.baseURL = 'http://127.0.0.1:8888/api/private/v1/'
+
+// 引入 nprogress
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
+
 // 请求拦截器
 axios.interceptors.request.use(config => {
+  NProgress.start();
   config.headers.Authorization = window.sessionStorage.getItem('token')
   return config
 })
 // 响应拦截器
-// axios.interceptors.response.use(res => {
-//   return res.data
-// })
+axios.interceptors.response.use(res => {
+  NProgress.done();
+  return res
+})
 Vue.prototype.$http = axios
 
 // 全局配置message
