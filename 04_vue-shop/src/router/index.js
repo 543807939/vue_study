@@ -8,41 +8,41 @@ const routes = [{
   redirect: '/login'
 }, {
   path: '/login',
-  component: () => import('../components/Login.vue')
+  component: () => import(/* webpackChunkName: "group-login_home_welcome" */'../components/Login.vue')
 }, {
   path: '/home',
-  component: () => import('../components/Home.vue'),
+  component: () => import(/* webpackChunkName: "group-login_home_welcome" */'../components/Home.vue'),
   redirect: '/welcome',
   children: [{
     path: '/welcome',
-    component: () => import('../components/Welcome.vue'),
+    component: () => import(/* webpackChunkName: "group-login_home_welcome" */'../components/Welcome.vue'),
   }, {
     path: '/users',
-    component: () => import('../components/user/User.vue')
+    component: () => import(/* webpackChunkName: "group-users" */'../components/user/User.vue')
   }, {
     path: '/rights',
-    component: () => import('../components/power/Rights.vue')
+    component: () => import(/* webpackChunkName: "group-users" */'../components/power/Rights.vue')
   }, {
     path: '/roles',
-    component: () => import('../components/power/Roles.vue')
+    component: () => import(/* webpackChunkName: "group-users" */'../components/power/Roles.vue')
   }, {
     path: '/categories',
-    component: () => import('../components/goods/Cate.vue')
+    component: () => import(/* webpackChunkName: "group-categories" */'../components/goods/Cate.vue')
   }, {
     path: '/params',
-    component: () => import('../components/goods/Params.vue')
+    component: () => import(/* webpackChunkName: "group-categories" */'../components/goods/Params.vue')
   }, {
     path: '/goods',
-    component: () => import('../components/goods/List.vue'),
+    component: () => import(/* webpackChunkName: "group-goods" */'../components/goods/List.vue'),
   }, {
     path: '/goods/add',
-    component: () => import('../components/goods/Add.vue')
+    component: () => import(/* webpackChunkName: "group-goods" */'../components/goods/Add.vue')
   }, {
     path: '/orders',
-    component: () => import('../components/order/Order.vue')
+    component: () => import(/* webpackChunkName: "group-goods" */'../components/order/Order.vue')
   }, {
     path: '/reports',
-    component: () => import('../components/report/Report.vue')
+    component: () => import(/* webpackChunkName: "group-reports" */'../components/report/Report.vue')
   }]
 }]
 
